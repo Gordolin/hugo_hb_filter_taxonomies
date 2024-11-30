@@ -1,0 +1,59 @@
+{{- $opts := .}}
+{{- $defaultLimit := default 10 $opts.limit }}
+{{- $defaultCount := default true $opts.count }}
+
+{{- $section := .section }} <!-- this is the current section -->
+{{- $taxonomies := site.Params.hb.blog.sidebar.taxonomies }} <!-- taxonomies configuration -->
+{{- $allowedTaxonomies := index $taxonomies $section "allowed" }}
+
+<!-- config in params.yaml:
+blog:
+    sidebar:
+      taxonomies:
+        news:
+          allowed: [categories, tags, series] -->
+
+<!-- if no allowed taxonomies are specified, allow all  -->
+{{- if not $allowedTaxonomies }}
+  {{- $allowedTaxonomies = slice }}
+{{- end }}
+
+{{- $taxonomies := slice }}
+
+{{- range $name, $taxonomy := site.Taxonomies }}
+  {{- if and (gt (len $allowedTaxonomies) 0) (not (in $allowedTaxonomies $name)) }}
+    {{- continue }}
+  {{- end }}
+
+  {{- $limit := $defaultLimit }}
+  {{- $count := $defaultCount }}
+  {{- $weight := 10 }}
+  {{- $title := "" }}
+  {{- with index $opts $name }}
+    {{- if default false .disable }}
+      {{- continue }}
+    {{- end }}
+    {{- with .limit }}
+      {{- $limit = . }}
+    {{- end }}
+    {{- with .title }}
+      {{- $title = . }}
+    {{- end }}
+    {{- if isset . "count" }}
+      {{- $count = .count }}
+    {{- end }}
+    {{- with .weight }}
+      {{- $weight = . }}
+    {{- end }}
+  {{- end }}
+
+  {{- $taxonomies = $taxonomies | append (dict
+    "name" $name
+    "title" $title
+    "terms" (first $limit $taxonomy.ByCount)
+    "count" $count
+    "weight" $weight)
+  }}
+{{- end }}
+
+{{- return sort $taxonomies "weight" }}

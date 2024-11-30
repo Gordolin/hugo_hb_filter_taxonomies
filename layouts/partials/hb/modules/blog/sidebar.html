@@ -1,0 +1,15 @@
+{{- if default true .Params.sidebar }}
+
+<p>Hello</p>
+
+  <div class="hb-blog-sidebar pe-lg-1">
+    {{- $opts := site.Params.hb.blog.sidebar.taxonomies }}
+{{- if default false site.Params.hb.blog.sidebar.taxonomies.separate }}
+  {{ partial "hb/modules/blog/taxonomies/default" (merge $opts (dict "section" .Section)) }}
+{{- else }}
+  <div class="hb-blog-sidebar-taxonomies hb-module">
+    {{ partial "hb/modules/blog/taxonomies/toggle" (merge $opts (dict "section" .Section)) }}
+  </div>
+{{- end }}
+  </div>
+{{- end }}
