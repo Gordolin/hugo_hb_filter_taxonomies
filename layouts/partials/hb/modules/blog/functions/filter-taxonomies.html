@@ -3,7 +3,7 @@
 {{- $defaultCount := default true $opts.count }}
 
 {{- $section := .section }} <!-- this is the current section -->
-{{- $taxonomies := site.Params.hb.blog.sidebar.taxonomies }} <!-- taxonomies configuration -->
+{{- $taxonomies := site.Params.hb.filter_taxonomies }} <!-- taxonomies configuration -->
 {{- $allowedTaxonomies := index $taxonomies $section "allowed" }}
 
 <!-- config in params.yaml:
