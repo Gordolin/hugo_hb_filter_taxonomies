@@ -9,10 +9,12 @@ Configuration (yaml):
 ```
 params:
     hb:
-        blog:
-            taxonomies:
-                [section]:
-                    allowed:
-                        - taxonomy A
-                        - taxonomy B
+        filter_taxonomies:
+            [section]:
+                allowed:
+                    - taxonomy A
+                    - taxonomy B
                         ...
+
+
+Replace "[section]" with one of your existing sections, e.g. news, blog, books
